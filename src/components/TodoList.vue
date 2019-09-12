@@ -1,19 +1,11 @@
 <template>
   <fragment>
     <h1>Todo List</h1>
-    <ul class="todo-list">
-      <li id="item1" :key="item.name" v-for="item in this.todoItems">
-       <label :class="{done: item.done}" class="container">
-          
-          
-          <input type="checkbox" v-model="item.done">
-          <a href="#" @click.prevent="displayDescription(item)">{{item.name}}</a>
-     <span class="checkmark"></span>
-      </label>
-      </li>
-    </ul>
-
-    <Modal id="descriptionModal" @close="descriptionItem = null" v-show="descriptionItem !== null">
+    <div class="columns">
+      <Column title="TODO" :items="pendingTodoItems" className="todo-column" />
+      <Column title="DONE" :items="completedTodoItems" className="completed-column" />
+    </div>
+      <Modal id="descriptionModal" @close="descriptionItem = null" v-show="descriptionItem !== null">
       <slot id="modal-content">
         <div class="modal-header">
           <h1>Task {{descriptionItem ? descriptionItem.name : "None"}}</h1>
@@ -39,10 +31,11 @@ import { Fragment } from "vue-fragment";
 import { store } from "../store.js";
 import CreateTask from "./CreateTask.vue";
 import Modal from "./Modal.vue";
+import Column from "./Column.vue";
 
 export default {
   name: "TodoList",
-  components: { Fragment, CreateTask, Modal },
+  components: { Fragment, CreateTask, Modal, Column },
   data() {
     console.log("instantiatin data");
     return {
@@ -62,8 +55,7 @@ export default {
   beforeDestroy() {},
   methods: {
     log() {
-      console.log('change')
-  
+      console.log("change");
     },
     displayDescription(item) {
       this.descriptionItem = item;
@@ -90,6 +82,15 @@ export default {
     fetchItems() {
       this.todoItems = store.items;
     }
+  },
+  computed: {
+    pendingTodoItems() {
+      return this.todoItems.filter(item => !item.done)
+    },
+
+   completedTodoItems() {
+      return this.todoItems.filter(item => item.done)
+    }
   }
 };
 </script>
@@ -103,73 +104,23 @@ button {
   min-width: 60px;
 }
 
-.todo-list li {
-  list-style-type: none;
-}
-.todo-list a {
-  text-decoration: none;
-  color: black;
-}
-.todo-list a {
-  text-decoration: none;
-  color: black;
+.completed-column {
+  float: right;
 }
 
-.todo-list .done a {
-  text-decoration: line-through;
+.todo-column {
+  float: left
 }
 
-.todo-list .container {
-  position: relative;
-  display: block;
-  padding-left: 25px;
-  margin-bottom: 15px;
-  cursor: pointer;
 
-}
-
-.todo-list .checkmark {
-  position: absolute;
-  top:0;
-  left:0;
-  width:25px;
-  height:25px;
-  background-color: #eee;
-
-}
-
-.todo-list .container:hover .checkmark {
-  background-color: #ccc;
-}
-
-/* When the checkbox is checked, add a blue background */
-.container input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
-/* Create the checkmark/indicator (hidden when not checked) */
-.todo-list .checkmark:after {
+.columns::after {
   content: "";
-  position: absolute;
-  display: none;
+  clear: both;
+  display: table;
 }
-
-/* Show the checkmark when checked */
-.todo-list .container input:checked ~ .checkmark:after {
-  display: block;
+.columns {
+  width: 60%;
 }
-/* Style the checkmark/indicator */
-.todo-list .container .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 1px 3px 0;
-  /* -webkit-transform: rotate(45deg); */
-  /* -ms-transform: rotate(45deg); */
-  transform: rotate(45deg);
-}
-
 
 .todo-list input {
   cursor: pointer;

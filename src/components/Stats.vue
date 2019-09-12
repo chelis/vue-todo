@@ -1,19 +1,19 @@
 <template>
   <div>
     <h1>Stats</h1>
-    <Card :count="this.count" title="Total" />
-    <Card :count="this.done" title="Done" type="success"/>
-    <Card :count="this.pending" title="Pending" type="warn"/>
+    <StatsCard :count="this.count" title="Total" />
+    <StatsCard :count="this.done" title="Done" type="success"/>
+    <StatsCard :count="this.pending" title="Pending" type="warn"/>
   </div>
 </template>
 
 <script>
 import {store} from '../store.js';
-import Card from './Card.vue'
+import StatsCard from './StatsCard.vue'
 
 export default {
   name: "Stats",
-  components: {Card},
+  components: {StatsCard},
   computed: {
     count() {
       return store.items.length

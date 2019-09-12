@@ -5,6 +5,7 @@ import TodoList from "./components/TodoList.vue";
 import Stats from "./components/Stats.vue";
 
 Vue.use(VueRouter);
+
 Vue.config.productionTip = false;
 
 const router = new VueRouter({
@@ -17,4 +18,5 @@ const router = new VueRouter({
 new Vue({
   render: h => h(App),
   router
+
 }).$mount("#app");

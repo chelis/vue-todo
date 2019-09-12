@@ -2,11 +2,11 @@
   <div class="form-wrapper">
     <h1>New Task</h1>
     <form>
-      <div class="clearfix control-group">
+      <div class="control-group">
         <label for="name">Name</label>
         <input id="name" type="text" v-model="taskName">
       </div>
-      <div class="clearfix control-group">
+      <div class="control-group">
         <label for="description">Description</label>
         <input id="description" type="text" v-model="taskDescription">
       </div>
@@ -34,9 +34,11 @@ export default {
   methods: {
     addTask() {
       this.$emit("add-task", this.taskName, this.taskDescription);
-      this.$emit("close")
+      this.close()
     },
     close() {
+      this.taskName = ''
+      this.taskDescription = ''
       this.$emit("close");
     }
   }
@@ -48,7 +50,7 @@ export default {
   height: 80%;
 }
 
-.clearfix::after {
+.control-group::after {
   content: "";
   clear: both;
   display: table;
